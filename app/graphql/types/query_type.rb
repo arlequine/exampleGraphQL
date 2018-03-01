@@ -1,9 +1,10 @@
 Types::QueryType = GraphQL::ObjectType.define do
   name 'Query'
 
-  # queries are just represented as fields
-  field :allLinks, !types[Types::LinkType] do
-    # resolve would be called in order to fetch data for that field
-    resolve -> (obj, args, ctx) { Link.all }
+  field :node, GraphQL::Relay::Node.field
+
+  field :allLinks, function: Resolvers::LinksSearch
+  field :_allLinksMeta, Types::QueryMetaType do
+    resolve ->(_obj, _args, _ctx) { Link.count }
   end
 end

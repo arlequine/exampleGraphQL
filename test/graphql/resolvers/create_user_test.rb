@@ -5,7 +5,7 @@ class Resolvers::CreateUserTest < ActiveSupport::TestCase
     Resolvers::CreateUser.new.call(nil, args, nil)
   end
 
-  test 'creating new user' do
+  test 'success' do
     user = perform(
       name: 'Test User',
       authProvider: {
@@ -19,5 +19,9 @@ class Resolvers::CreateUserTest < ActiveSupport::TestCase
     assert user.persisted?
     assert_equal user.name, 'Test User'
     assert_equal user.email, 'email@example.com'
+  end
+
+  test 'failure' do
+    assert perform.is_a? GraphQL::ExecutionError
   end
 end
